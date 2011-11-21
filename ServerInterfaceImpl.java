@@ -1,4 +1,3 @@
-
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -63,47 +62,24 @@ public class ServerInterfaceImpl  extends java.rmi.server.UnicastRemoteObject im
 	}
 
 	public HashMap<String,Snapshot> requestSnapshots () throws java.rmi.RemoteException{
-		return null;
+		return snapshots;
 	}
 	
 	//add node
 	public void addImportantNodes (ArrayList<String> ip) throws java.rmi.RemoteException{
-		;
+		synchronized(importantNodes){
+			importantNodes.addAll(ip);
+		}
 	}
 
 	//remove node
 	public void removeImportantNodes (ArrayList<String> ip) throws java.rmi.RemoteException{
-		;
-	}
-
-
-
-/*	@SuppressWarnings("unchecked")
-	public ArrayList<Snapshot> requestSnapshots(int depth) throws RemoteException
-	{
-		ArrayList<Snapshot> out;
-		synchronized(snapshots)
-		{
-			out = (ArrayList<Snapshot>)snapshots.clone();
-		}
-		return out;
-	}
-	
-	
-	public void addNode(Node n) throws RemoteException {
-		synchronized(nodes)
-		{
-			nodes.add(n);
+		synchronized(importantNodes){
+			for(String s : ip){
+				importantNodes.remove(s);
+			}
 		}
 	}
 
-	
-	public void removeNode(Node n) throws RemoteException {
-		synchronized(nodes)
-		{
-			nodes.remove(n);
-		}
-	}
-*/
 }
 
