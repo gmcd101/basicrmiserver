@@ -1,3 +1,6 @@
+
+import java.util.ArrayList;
+
 public interface ClientInterface extends java.rmi.Remote{
 	
 	/**
@@ -6,6 +9,6 @@ public interface ClientInterface extends java.rmi.Remote{
 	public ArrayList<Snapshot> requestData() throws java.rmi.RemoteException;
 
 	//update
-	public bool update (ArrayList<String>) throws java.rmi.RemoteException;
+	public boolean update (ArrayList<String> importantNodes) throws java.rmi.RemoteException;
 }
 

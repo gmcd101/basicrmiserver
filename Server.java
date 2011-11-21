@@ -1,3 +1,4 @@
+
 import java.rmi.Naming;
 import java.util.ArrayList;
 import java.rmi.registry.LocateRegistry;
@@ -10,7 +11,7 @@ public class Server implements Runnable
 	{
 		System.out.println("Start");
 		new Server();
-		Thread t = 
+		//Thread t =
 		System.out.println("Finished");
 	}
 	

@@ -1,4 +1,6 @@
+
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.rmi.server.UID;
 
 public interface ServerInterface extends java.rmi.Remote {
@@ -19,7 +21,7 @@ public interface ServerInterface extends java.rmi.Remote {
 
 	public ArrayList<Snapshot> requestSpecificSnapshot (String ip) throws java.rmi.RemoteException;
 
-	public Hashmap<String,Snapshot> requestSnapshots () throws java.rmi.RemoteException;
+	public HashMap<String,Snapshot> requestSnapshots () throws java.rmi.RemoteException;
 	//add node
 	public void addImportantNodes (ArrayList<String> ip) throws java.rmi.RemoteException;
 	//remove node

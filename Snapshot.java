@@ -1,5 +1,10 @@
+
 import java.io.Serializable;
 import java.rmi.server.UID;
+import java.util.HashMap;
+import java.util.ArrayList;
+import java.util.Date;
+
 public class Snapshot implements Serializable{
 
 	/**

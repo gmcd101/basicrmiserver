@@ -1,3 +1,4 @@
+
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,14 +15,14 @@ public class ServerInterfaceImpl  extends java.rmi.server.UnicastRemoteObject im
 	ArrayList<String> importantNodes;
 	
 	//<important node ip, snapshots relating to that
-	HashMap<Stirng,Snapshot> snapshots;
+	HashMap<String,Snapshot> snapshots;
 
 	public ServerInterfaceImpl() throws java.rmi.RemoteException
 	{
 		super();
 		clients = new HashMap<UID, String>();
 		importantNodes = new ArrayList<String>();
-		snapshots = new ArrayList<Snapshot>();
+		snapshots = new HashMap<String,Snapshot>();
 	}
 	
 	public UID register(String ip) throws java.rmi.RemoteException
@@ -40,12 +41,12 @@ public class ServerInterfaceImpl  extends java.rmi.server.UnicastRemoteObject im
 	@SuppressWarnings("unchecked")
 	public ArrayList<String> setup() throws java.rmi.RemoteException
 	{
-		ArrayList<Node> out;
+		ArrayList<String> out;
 		
 		//cant allow other threads to change while cloning
-		synchronized(nodes)
+		synchronized(importantNodes)
 		{
-			out = (ArrayList<String>) nodes.clone();
+			out = (ArrayList<String>) importantNodes.clone();
 		}
 		return out;
 	}
@@ -56,7 +57,28 @@ public class ServerInterfaceImpl  extends java.rmi.server.UnicastRemoteObject im
 			clients.remove(u);
 		}
 	}
-	@SuppressWarnings("unchecked")
+
+	public ArrayList<Snapshot> requestSpecificSnapshot (String ip) throws java.rmi.RemoteException{
+		return null;
+	}
+
+	public HashMap<String,Snapshot> requestSnapshots () throws java.rmi.RemoteException{
+		return null;
+	}
+	
+	//add node
+	public void addImportantNodes (ArrayList<String> ip) throws java.rmi.RemoteException{
+		;
+	}
+
+	//remove node
+	public void removeImportantNodes (ArrayList<String> ip) throws java.rmi.RemoteException{
+		;
+	}
+
+
+
+/*	@SuppressWarnings("unchecked")
 	public ArrayList<Snapshot> requestSnapshots(int depth) throws RemoteException
 	{
 		ArrayList<Snapshot> out;
@@ -82,6 +104,6 @@ public class ServerInterfaceImpl  extends java.rmi.server.UnicastRemoteObject im
 			nodes.remove(n);
 		}
 	}
-
+*/
 }
 
