@@ -23,10 +23,14 @@ public class Snapshot implements Serializable{
 	
 	public Snapshot (UID u, String ip)
 	{
-		this.timestamp = new Date();
-		this.creatorUID = u;
-		this.creatorIP = ip;
-		this.results = new HashMap<String, ArrayList<TestResult>>();
+		this.timestamp = new Date();	//start time of snapshot
+		this.creatorUID = u;		//UID of node carrying out test
+		this.creatorIP = ip;		//IP address of node carrying out test
+		this.results = new HashMap<String, ArrayList<TestResult>>(); //For sorting purposes, store result with important node's ID as a string
+	}
+
+	public void addResult(TestResult result, String nodeUnderTest){
+		
 	}
 
 	

@@ -1,12 +1,11 @@
 
-import java.rmi.Naming;
 import java.util.ArrayList;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 
 public class Server implements Runnable
 {
-	ArrayList<Node> cs;
+	ArrayList<Client> cs;
 	public static void main(String[] args)
 	{
 		System.out.println("Start");
@@ -17,7 +16,7 @@ public class Server implements Runnable
 	
 	public Server ()
 	{
-		cs = new ArrayList<Node>();
+		cs = new ArrayList<Client>();
 		System.out.println("Setting up RMI Server");
 		try
 		{
