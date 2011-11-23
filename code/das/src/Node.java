@@ -20,26 +20,7 @@ public class Node extends Client {
 	}
 	
 	
-	public Snapshot compileSnapshot(){
-		Snapshot newShot = new Snapshot(ip, id);
-		Iterator<InetAddress> nodesToTest = importantNodes.iterator();
-		InetAddress current;
-		
-		while(nodesToTest.hasNext()){
-			current = nodesToTest.next();
 
-			TestResult pingResult = (new PingTest(current)).run();
-			TestResult traceResult = (new TraceTest(current)).run();
-
-			//add the ping test result
-			newShot.addTest(pingResult);
-			//add the trace route result
-			newShot.addTest(traceResult);
-		}
-		
-		
-		return newShot;
-	}
 	
 	
 	public void run() {
@@ -50,9 +31,11 @@ public class Node extends Client {
 			if(importantNodes != null)
 				System.out.println("Got list of important nodes: " + importantNodes.toString());
 			
-			//server.goodbye(id, type);
-			System.out.println("---Test Snapshot ---\n" + compileSnapshot().toString() + "\n-----------");
+			//TEST Snapshot
+			System.out.println("---Test Snapshot ---\n" + rmi_c.compileSnapshot(ip, id).toString() + "\n-----------");
 			
+			
+			server.goodbye(id, type);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

@@ -1,5 +1,6 @@
 import java.net.InetAddress;
 import java.rmi.RemoteException;
+import java.rmi.server.UID;
 import java.util.List;
 
 
@@ -12,6 +13,5 @@ public interface RmiClientInterface extends java.rmi.Remote{
 	
 	public void sendSnapshot(Snapshot shot) throws RemoteException;
 	
-
-	
+	public Snapshot compileSnapshot();
 }

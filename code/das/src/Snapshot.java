@@ -45,7 +45,7 @@ public class Snapshot {
 		output += "Tests:\n";
 		while(results.hasNext()){
 			try{
-				output += results.next().getResult();
+				output += results.next().getResult() + "\n";
 		
 			}		
 			catch(Exception e){}

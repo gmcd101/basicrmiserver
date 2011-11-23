@@ -151,4 +151,15 @@ public class RmiServerImpl extends java.rmi.server.UnicastRemoteObject implement
 			return true;
 		}
 	}
+	
+	public List<Snapshot> gatherSnapshots() throws RemoteException {
+		Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
+		List<Snapshot> allShots = new ArrayList<Snapshot>();
+		
+		while(allNodes.hasNext()){
+			allShots.add(allNodes.next().compileSnapshot());
+		}
+		
+		return null;
+	}
 }

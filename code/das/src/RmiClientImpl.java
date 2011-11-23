@@ -3,7 +3,9 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.rmi.server.UID;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 
@@ -51,5 +53,28 @@ public class RmiClientImpl extends java.rmi.server.UnicastRemoteObject implement
 	public void sendSnapshot(Snapshot shot){
 		
 	}
+	
+	public Snapshot compileSnapshot(){
+		Snapshot newShot = new Snapshot(ip, id);
+		Iterator<InetAddress> nodesToTest = importantNodes.iterator();
+		InetAddress current;
+		
+		while(nodesToTest.hasNext()){
+			current = nodesToTest.next();
+
+			TestResult pingResult = (new PingTest(current)).run();
+			TestResult traceResult = (new TraceTest(current)).run();
+
+			//add the ping test result
+			newShot.addTest(pingResult);
+			//add the trace route result
+			newShot.addTest(traceResult);
+		}
+		
+		
+		return newShot;
+	}
+	
+	
 	
 }
