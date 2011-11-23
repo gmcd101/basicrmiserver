@@ -5,11 +5,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 
 
 public class PingTest extends Test {
 
-	public PingTest(String destination) {
+	public PingTest(InetAddress destination) {
 		super(destination);
 	}
 	

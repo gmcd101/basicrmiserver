@@ -5,11 +5,12 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 
 
 public abstract class Test {
-	String destination;
-	public Test(String destination){
+	InetAddress destination;
+	public Test(InetAddress destination){
 		this.destination = destination;
 	}
 	

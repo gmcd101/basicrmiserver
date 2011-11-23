@@ -1,7 +1,9 @@
+import java.net.InetAddress;
+
 
 public class TraceTest extends Test {
 
-	public TraceTest(String destination) {
+	public TraceTest(InetAddress destination) {
 		super(destination);
 	}
 
