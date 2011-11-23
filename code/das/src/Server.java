@@ -40,30 +40,6 @@ public class Server extends NetworkedSystem{
 		
 		System.out.println("Server Started.");
 		
-		//TODO: REMOVE TEST ADDS
-		ArrayList<InetAddress> testingNodes = new ArrayList<InetAddress>();
-		Scanner inputScanner = new Scanner(System.in);
-		
-		try {
-			while(inputScanner.hasNextLine()){
-				testingNodes.clear();
-				testingNodes.add(InetAddress.getByName(inputScanner.nextLine()));
-				s.rmi_svr.addImportantNodes(testingNodes);
-			}
-			
-			
-			
-			//testingNodes.add(InetAddress.getByName("www.google.com"));
-			//testingNodes.add(InetAddress.getByName("www.gla.ac.uk"));
-			//rmi_svr.addImportantNodes(testingNodes);
-		
-		} catch (UnknownHostException e1) {
-			e1.printStackTrace();
-		
-		} catch (RemoteException e) {
-			e.printStackTrace();
-		}
-		
 		t.join();
 	}
 	

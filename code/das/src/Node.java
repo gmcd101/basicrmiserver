@@ -10,8 +10,8 @@ public class Node extends Client {
 	private List<Test> tests;
 	
 	
-	public Node(String server){
-		super(server);
+	public Node(String svr){
+		super(svr);
 		tests = new ArrayList<Test>();
 		type = RmiServerInterface.clientType.NODE;
 	}

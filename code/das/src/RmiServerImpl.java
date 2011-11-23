@@ -19,6 +19,7 @@ public class RmiServerImpl extends java.rmi.server.UnicastRemoteObject implement
 	private Map<UID, RmiClientInterface> connectedNodes;
 	private Map<UID, RmiClientInterface> connectedViewers;	
 	
+	private List<RmiClientInterface> subscribedViewers;
 	
 	//Stores IP addresses of nodes that need to be tested
 	private List<InetAddress> importantNodes;
@@ -35,6 +36,7 @@ public class RmiServerImpl extends java.rmi.server.UnicastRemoteObject implement
 		connectedViewers = new HashMap<UID, RmiClientInterface>();
 		
 		importantNodes = new ArrayList<InetAddress>();
+		subscribedViewers = new ArrayList<RmiClientInterface>();
 		
 		snapshots = new HashMap<InetAddress, Snapshot>();
 		
@@ -129,6 +131,24 @@ public class RmiServerImpl extends java.rmi.server.UnicastRemoteObject implement
 		
 		while(allNodes.hasNext()){
 			allNodes.next().updateImportantNodes(importantNodes);
+		}
+	}
+	
+	@Override
+	public boolean snapshotSubscribe(UID id, clientType type) throws RemoteException {
+		if(type == clientType.NODE)
+			return false;
+		
+		synchronized(subscribedViewers){
+			//check viewer is registered
+			if (!connectedViewers.containsKey(id)){
+				return false;
+			}
+			
+			//is registered, so add to list of subscribed Viewers
+			subscribedViewers.add(connectedViewers.get(id));
+			
+			return true;
 		}
 	}
 }
