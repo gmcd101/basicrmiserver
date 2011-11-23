@@ -7,8 +7,10 @@ import java.rmi.RemoteException;
 
 
 
-public abstract class Client extends NetworkedSystem{
+public abstract class Client extends NetworkedSystem {
+	
 	RmiClientImpl rmi_c;
+
 	RmiServerInterface server;		//interface to call functions at RMI server
 	InetAddress ip;
 	RmiServerInterface.clientType type;

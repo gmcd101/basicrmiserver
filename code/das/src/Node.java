@@ -12,7 +12,6 @@ public class Node extends Client {
 		type = RmiServerInterface.clientType.NODE;
 	}
 	
-	@Override
 	public void run() {
 		try {
 			server.register(ip, type);

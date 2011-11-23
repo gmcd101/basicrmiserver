@@ -1,15 +1,30 @@
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.io.StringWriter;
+import java.io.UnsupportedEncodingException;
+
 
 public class PingTest extends Test {
 
 	public PingTest(String destination) {
 		super(destination);
-		// TODO Auto-generated constructor stub
 	}
-
+	
 	@Override
-	public TestResult run() {
-		// TODO Auto-generated method stub
-		return null;
+	public TestResult run(){
+		String out;
+        try {
+        	Runtime rt = Runtime.getRuntime();
+			Process proc = rt.exec("ping "+destination+" -c 10");
+			out = inputStreamToString(proc.getInputStream());
+			
+        }catch (Exception e){
+        	return null;
+        }
+		return new PingResult(out);
 	}
 
 }
