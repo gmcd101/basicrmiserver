@@ -3,7 +3,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.rmi.server.UID;
 
-public interface ServerInterface extends java.rmi.Remote {
+public interface RmiInterface extends java.rmi.Remote {
 	
 	/*
 	Dumb Client Functions

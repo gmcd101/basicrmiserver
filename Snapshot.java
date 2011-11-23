@@ -18,7 +18,7 @@ public class Snapshot implements Serializable{
 	String creatorIP;
 	//uid
 	UID creatorUID;
-	//hashmap of string(key - ip) & 'test result class'
+	//hashmap of string(key - ip) & list of test results
 	HashMap<String, ArrayList<TestResult>> results;
 	
 	public Snapshot (UID u, String ip)

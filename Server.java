@@ -10,33 +10,31 @@ public class Server implements Runnable
 	{
 		System.out.println("Start");
 		new Server();
-		//Thread t =
 		System.out.println("Finished");
 	}
 	
-	public Server ()
-	{
+	public Server (){
 		cs = new ArrayList<Client>();
 		System.out.println("Setting up RMI Server");
-		try
-		{
+		
+		try{
 			setRMI();
 		}
-		catch (Exception e)
-		{
+		catch (Exception e){
 			System.out.println("Failure");
 			e.printStackTrace();
 		}
 	}
-	private void setRMI() throws Exception
-	{
+	
+	private void setRMI() throws Exception{
 		Registry registry = LocateRegistry.getRegistry();
-		ServerInterfaceImpl r = new ServerInterfaceImpl();
+		RmiInterfaceImpl r = new RmiInterfaceImpl();
 		registry.rebind("NetworkDiag", r);
 		System.out.println("Set up successful: listening");
 	}
+	
 	public void run(){
-		
+		//Stuff will do when running..
 	}
 
 }
