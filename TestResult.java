@@ -9,5 +9,13 @@ public abstract class TestResult{
 		this.timestamp = new Date();
 		this.nodeUnderTest = ip;
 	}
+	
+	public Date getTimestamp(){
+		return timestamp;
+	}
+	
+	public String getNodeUnderTest(){
+		return nodeUnderTest;
+	}
 
 }
