@@ -1,14 +1,20 @@
+import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
+import java.util.List;
 
 
-public class RmiClientImpl implements RmiClientInterface{
+public class RmiClientImpl extends java.rmi.server.UnicastRemoteObject implements RmiClientInterface{
 
-	public RmiClientImpl(){
-		
-
+	private static final long serialVersionUID = 1L;
+	List<InetAddress> importantNodes;
+	
+	
+	public RmiClientImpl() throws RemoteException{
+		importantNodes = new ArrayList<InetAddress>();
 	}
 
 	public RmiServerInterface findSvr(String serverName) {
@@ -29,6 +35,16 @@ public class RmiClientImpl implements RmiClientInterface{
 		}
 		
 		return server;
+	}
+	
+	
+	public void updateImportantNodes(List<InetAddress> impNodes){
+		System.out.println("Updated important nodes list received:\n" + impNodes);
+		importantNodes = new ArrayList<InetAddress>(impNodes);
+	}
+	
+	public List<InetAddress> getImportantNodes(){
+		return importantNodes;
 	}
 	
 }

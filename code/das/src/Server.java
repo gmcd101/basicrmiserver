@@ -1,13 +1,12 @@
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.rmi.RemoteException;
-import java.rmi.registry.LocateRegistry;
-import java.rmi.registry.Registry;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 
 public class Server extends NetworkedSystem{
 	RmiServerImpl rmi_svr;
-	ArrayList<InetAddress> testingNodes;
 	
 	public Server()
 	{
@@ -21,12 +20,10 @@ public class Server extends NetworkedSystem{
 			re.printStackTrace();
 			System.exit(-1);
 		}
-			
-		testingNodes = new ArrayList<InetAddress>();
 	}
 
 
-	// TODO write
+
 	public void run() {
 
 	}
@@ -42,6 +39,31 @@ public class Server extends NetworkedSystem{
 		t.run();
 		
 		System.out.println("Server Started.");
+		
+		//TODO: REMOVE TEST ADDS
+		ArrayList<InetAddress> testingNodes = new ArrayList<InetAddress>();
+		Scanner inputScanner = new Scanner(System.in);
+		
+		try {
+			while(inputScanner.hasNextLine()){
+				testingNodes.clear();
+				testingNodes.add(InetAddress.getByName(inputScanner.nextLine()));
+				s.rmi_svr.addImportantNodes(testingNodes);
+			}
+			
+			
+			
+			//testingNodes.add(InetAddress.getByName("www.google.com"));
+			//testingNodes.add(InetAddress.getByName("www.gla.ac.uk"));
+			//rmi_svr.addImportantNodes(testingNodes);
+		
+		} catch (UnknownHostException e1) {
+			e1.printStackTrace();
+		
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
 		t.join();
 	}
 	

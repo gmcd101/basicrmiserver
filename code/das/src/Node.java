@@ -1,10 +1,14 @@
+//import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 public class Node extends Client {
 	
-	ArrayList<Test> tests;
+	@SuppressWarnings("unused")
+	private List<Test> tests;
+	
 	
 	public Node(String server){
 		super(server);
@@ -12,9 +16,19 @@ public class Node extends Client {
 		type = RmiServerInterface.clientType.NODE;
 	}
 	
+	
+	
 	public void run() {
 		try {
-			server.register(ip, type);
+			id = server.register(ip, type, (RmiClientInterface) rmi_c);
+			
+			importantNodes = server.setup(id, type);
+			if(importantNodes != null)
+				System.out.println("Got list of important nodes: " + importantNodes.toString());
+			
+			//server.goodbye(id, type);
+			
+			
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
