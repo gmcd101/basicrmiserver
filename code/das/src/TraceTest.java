@@ -7,8 +7,16 @@ public class TraceTest extends Test {
 
 	@Override
 	public TestResult run() {
-		// TODO Auto-generated method stub
-		return null;
+		String out;
+        try {
+        	Runtime rt = Runtime.getRuntime();
+			Process proc = rt.exec("traceroute "+destination);
+			out = inputStreamToString(proc.getInputStream());
+			
+        }catch (Exception e){
+        	return null;
+        }
+		return new TraceResult(out);
 	}
 
 }

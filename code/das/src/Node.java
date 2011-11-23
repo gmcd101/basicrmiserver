@@ -10,7 +10,6 @@ public class Node extends Client {
 		tests = new ArrayList<Test>();
 	}
 	
-	@Override
 	public void run() {
 		// TODO Auto-generated method stub
 
