@@ -5,6 +5,7 @@ import java.io.InputStreamReader;
 import java.io.Reader;
 import java.io.StringWriter;
 import java.net.InetAddress;
+import java.util.Scanner;
 
 
 public abstract class Test {
@@ -14,16 +15,13 @@ public abstract class Test {
 	}
 	
 	protected String inputStreamToString(InputStream is) throws IOException{
-		StringWriter sw = new StringWriter();
-		char[] buffer = new char[1024];
-		Reader reader = new BufferedReader(new InputStreamReader(is,"UTF-8"));
-		int n;
+		Scanner streamScanner = new Scanner(is);
+		String output = "";
 		
-		while ((n = reader.read(buffer)) != -1) {
-			sw.write(buffer, 0, n);
+		while(streamScanner.hasNextLine()){
+			output += streamScanner.nextLine();
 		}
-		
-		return sw.toString();
+		return output;
 	}
 	
 	public abstract TestResult run();

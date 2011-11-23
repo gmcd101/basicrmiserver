@@ -7,29 +7,12 @@ import java.util.Scanner;
 
 public class Viewer extends Client {
 	
-	ArrayList<String> servers;
-	
 	public Viewer(String svr){
 		super(svr);
-		servers = new ArrayList<String>();
-		servers.add(svr);
 		
 		type = RmiServerInterface.clientType.VIEWER;
 	}
 	
-	//TODO
-	public void addServer(String ip){
-		
-	}
-	
-	//TODO
-	public void removeServer(String ip){
-		
-	}
-	
-	public ArrayList<String> getServers(){
-		return this.servers;
-	}
 	
 	//TODO
 	public void run() {
@@ -40,6 +23,7 @@ public class Viewer extends Client {
 			//TODO: REMOVE TEST ADDS
 			ArrayList<InetAddress> testingNodes = new ArrayList<InetAddress>();
 			Scanner inputScanner = new Scanner(System.in);
+			
 			while(inputScanner.hasNextLine()){
 				try {
 					
@@ -65,6 +49,8 @@ public class Viewer extends Client {
 		Viewer v = new Viewer (args[0]);
 		Thread t = new Thread(v);
 		t.run();
+		
+		System.out.println("Viewer started.");
 		t.join();
 	}
 

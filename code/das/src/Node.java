@@ -1,7 +1,10 @@
 //import java.net.InetAddress;
+import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Scanner;
 
 
 public class Node extends Client {
@@ -17,6 +20,27 @@ public class Node extends Client {
 	}
 	
 	
+	public Snapshot compileSnapshot(){
+		Snapshot newShot = new Snapshot(ip, id);
+		Iterator<InetAddress> nodesToTest = importantNodes.iterator();
+		InetAddress current;
+		
+		while(nodesToTest.hasNext()){
+			current = nodesToTest.next();
+
+			TestResult pingResult = (new PingTest(current)).run();
+			TestResult traceResult = (new TraceTest(current)).run();
+
+			//add the ping test result
+			newShot.addTest(pingResult);
+			//add the trace route result
+			newShot.addTest(traceResult);
+		}
+		
+		
+		return newShot;
+	}
+	
 	
 	public void run() {
 		try {
@@ -27,7 +51,7 @@ public class Node extends Client {
 				System.out.println("Got list of important nodes: " + importantNodes.toString());
 			
 			//server.goodbye(id, type);
-			
+			System.out.println("---Test Snapshot ---\n" + compileSnapshot().toString() + "\n-----------");
 			
 		} catch (RemoteException e) {
 			e.printStackTrace();

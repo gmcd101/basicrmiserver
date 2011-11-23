@@ -10,4 +10,8 @@ public interface RmiClientInterface extends java.rmi.Remote{
 	
 	public List<InetAddress> getImportantNodes() throws RemoteException;
 	
+	public void sendSnapshot(Snapshot shot) throws RemoteException;
+	
+
+	
 }

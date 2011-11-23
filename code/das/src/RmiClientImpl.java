@@ -11,7 +11,7 @@ public class RmiClientImpl extends java.rmi.server.UnicastRemoteObject implement
 
 	private static final long serialVersionUID = 1L;
 	List<InetAddress> importantNodes;
-	
+	List<Snapshot> snapshots;
 	
 	public RmiClientImpl() throws RemoteException{
 		importantNodes = new ArrayList<InetAddress>();
@@ -45,6 +45,11 @@ public class RmiClientImpl extends java.rmi.server.UnicastRemoteObject implement
 	
 	public List<InetAddress> getImportantNodes(){
 		return importantNodes;
+	}
+	
+	
+	public void sendSnapshot(Snapshot shot){
+		
 	}
 	
 }

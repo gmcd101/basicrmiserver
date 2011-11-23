@@ -19,10 +19,12 @@ public class PingTest extends Test {
 		String out;
         try {
         	Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec("ping "+destination+" -c 10");
-			out = inputStreamToString(proc.getInputStream());
+			Process proc = rt.exec("ping "+destination.getHostAddress()+" -c 5");
 			
+			out = inputStreamToString(proc.getInputStream());
+
         }catch (Exception e){
+        	
         	return null;
         }
 		return new PingResult(out);
