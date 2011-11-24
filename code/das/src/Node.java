@@ -26,16 +26,17 @@ public class Node extends Client {
 	public void run() {
 		try {
 			id = server.register(ip, type, (RmiClientInterface) rmi_c);
+			rmi_c.setClientIP(ip);
+			rmi_c.setClientID(id);
 			
 			importantNodes = server.setup(id, type);
-			if(importantNodes != null)
-				System.out.println("Got list of important nodes: " + importantNodes.toString());
+			rmi_c.updateImportantNodes(importantNodes);
 			
 			//TEST Snapshot
-			System.out.println("---Test Snapshot ---\n" + rmi_c.compileSnapshot(ip, id).toString() + "\n-----------");
+			System.out.println("---Test Snapshot ---\n" + rmi_c.compileSnapshot().toString() + "\n-----------");
 			
 			
-			server.goodbye(id, type);
+			//server.goodbye(id, type);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

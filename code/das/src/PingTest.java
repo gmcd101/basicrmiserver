@@ -24,7 +24,7 @@ public class PingTest extends Test {
 			out = inputStreamToString(proc.getInputStream());
 
         }catch (Exception e){
-        	
+        	e.printStackTrace();
         	return null;
         }
 		return new PingResult(out);

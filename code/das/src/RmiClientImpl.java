@@ -14,6 +14,8 @@ public class RmiClientImpl extends java.rmi.server.UnicastRemoteObject implement
 	private static final long serialVersionUID = 1L;
 	List<InetAddress> importantNodes;
 	List<Snapshot> snapshots;
+	InetAddress ip;
+	UID id;
 	
 	public RmiClientImpl() throws RemoteException{
 		importantNodes = new ArrayList<InetAddress>();
@@ -70,9 +72,18 @@ public class RmiClientImpl extends java.rmi.server.UnicastRemoteObject implement
 			//add the trace route result
 			newShot.addTest(traceResult);
 		}
-		
-		
+
 		return newShot;
+	}
+
+	@Override
+	public void setClientIP(InetAddress newIP) throws RemoteException {
+		ip = newIP;
+	}
+
+	@Override
+	public void setClientID(UID newID) throws RemoteException {
+		id = newID;
 	}
 	
 	

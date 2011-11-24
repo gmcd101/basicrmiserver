@@ -18,6 +18,8 @@ public class Viewer extends Client {
 	public void run() {
 		try {
 			id = server.register(ip, type, (RmiClientInterface) rmi_c);
+			rmi_c.setClientIP(ip);
+			rmi_c.setClientID(id);
 			server.snapshotSubscribe(id, type);
 			
 			//TODO: REMOVE TEST ADDS

@@ -16,6 +16,7 @@ public class TraceTest extends Test {
 			out = inputStreamToString(proc.getInputStream());
 			
         }catch (Exception e){
+        	e.printStackTrace();
         	return null;
         }
 		return new TraceResult(out);

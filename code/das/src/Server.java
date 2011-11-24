@@ -2,6 +2,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -45,6 +47,23 @@ public class Server extends NetworkedSystem{
 	
 	//TODO write
 	private void gatherSnapshots(){
+		List<Snapshot> snaps;
+		Iterator<Snapshot> allSnaps;
+		
+		try {
+			snaps = rmi_svr.gatherSnapshots();
+			System.out.println("Collected all snapshots ---");
+			allSnaps = snaps.iterator();
+			
+			while(allSnaps.hasNext()){
+				System.out.println(allSnaps.next().toString() + "\n----\n");
+			}
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		
+
+		
 		
 	}
 	
