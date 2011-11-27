@@ -1,18 +1,21 @@
 import java.net.InetAddress;
-import java.net.MalformedURLException;
+//import java.net.MalformedURLException;
 import java.net.UnknownHostException;
-import java.rmi.Naming;
-import java.rmi.NotBoundException;
+//import java.rmi.Naming;
+//import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
-import java.rmi.server.UID;
+//import java.rmi.server.UID;
 import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
+//import java.util.Iterator;
+//import java.util.List;
 import java.util.Scanner;
 
 
 public class Viewer extends Client implements RmiClientInterface {
 	
+	private static final long serialVersionUID = 1L;
+
+
 	public Viewer(String svr) throws RemoteException{
 		super(svr);
 		

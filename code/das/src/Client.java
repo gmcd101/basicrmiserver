@@ -13,6 +13,7 @@ import java.util.List;
 
 public abstract class Client extends java.rmi.server.UnicastRemoteObject implements Runnable {
 
+	private static final long serialVersionUID = 1L;
 	RmiServerInterface server;		//interface to call functions at RMI server
 	InetAddress ip;
 	UID id;

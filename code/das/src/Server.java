@@ -15,7 +15,6 @@ import java.util.List;
 import java.util.Map;
 
 
-
 public class Server extends java.rmi.server.UnicastRemoteObject implements Runnable,RmiServerInterface {
 	//RmiServerImpl rmi_svr;
 	private static final long serialVersionUID = 1L;
@@ -183,6 +182,8 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		while(allNodes.hasNext()){
 			allNodes.next().updateImportantNodes(importantNodes);
 		}
+		
+		System.out.println("Added important nodes: " + moreNodes.toString());
 	}
 
 	

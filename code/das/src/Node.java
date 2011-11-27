@@ -1,34 +1,24 @@
 //import java.net.InetAddress;
 //import java.net.InetAddress;
 import java.rmi.RemoteException;
-import java.util.ArrayList;
-//import java.util.Iterator;
-import java.util.List;
 
 //import java.util.Scanner;
 
  
 public class Node extends Client implements RmiClientInterface {
 	
-	@SuppressWarnings("unused")
-	private List<Test> tests;
+	private static final long serialVersionUID = 1L;
 	
 	
 	public Node(String svr) throws RemoteException {
 		super(svr);
-		tests = new ArrayList<Test>();
 		type = RmiServerInterface.clientType.NODE;
 	}
-	
-	
-
 	
 	
 	public void run() {
 		try {
 			id = server.register(ip, type, (RmiClientInterface) this);
-			//rmi_c.setClientIP(ip);
-			//rmi_c.setClientID(id);
 			
 			importantNodes = server.setup(id, type);
 			updateImportantNodes(importantNodes);
@@ -37,7 +27,7 @@ public class Node extends Client implements RmiClientInterface {
 			System.out.println("---Test Snapshot ---\n" + compileSnapshot().toString() + "\n-----------");
 			
 			
-			//server.goodbye(id, type);
+				server.goodbye(id, type);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
@@ -56,6 +46,7 @@ public class Node extends Client implements RmiClientInterface {
 			t.run();
 			t.join();
 		} catch (RemoteException e) {
+			System.err.println("Error Starting Node:");
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
