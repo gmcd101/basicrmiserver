@@ -13,9 +13,6 @@ public interface RmiClientInterface extends java.rmi.Remote{
 	
 	public void sendSnapshot(Snapshot shot) throws RemoteException;
 	
-	public void setClientIP(InetAddress ip) throws RemoteException;
-	
-	public void setClientID(UID id) throws RemoteException;
 	
 	public Snapshot compileSnapshot() throws RemoteException;
 }

@@ -1,19 +1,20 @@
 //import java.net.InetAddress;
-import java.net.InetAddress;
+//import java.net.InetAddress;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
-import java.util.Iterator;
+//import java.util.Iterator;
 import java.util.List;
-import java.util.Scanner;
 
+//import java.util.Scanner;
 
-public class Node extends Client {
+ 
+public class Node extends Client implements RmiClientInterface {
 	
 	@SuppressWarnings("unused")
 	private List<Test> tests;
 	
 	
-	public Node(String svr){
+	public Node(String svr) throws RemoteException {
 		super(svr);
 		tests = new ArrayList<Test>();
 		type = RmiServerInterface.clientType.NODE;
@@ -25,15 +26,15 @@ public class Node extends Client {
 	
 	public void run() {
 		try {
-			id = server.register(ip, type, (RmiClientInterface) rmi_c);
-			rmi_c.setClientIP(ip);
-			rmi_c.setClientID(id);
+			id = server.register(ip, type, (RmiClientInterface) this);
+			//rmi_c.setClientIP(ip);
+			//rmi_c.setClientID(id);
 			
 			importantNodes = server.setup(id, type);
-			rmi_c.updateImportantNodes(importantNodes);
+			updateImportantNodes(importantNodes);
 			
 			//TEST Snapshot
-			System.out.println("---Test Snapshot ---\n" + rmi_c.compileSnapshot().toString() + "\n-----------");
+			System.out.println("---Test Snapshot ---\n" + compileSnapshot().toString() + "\n-----------");
 			
 			
 			//server.goodbye(id, type);
@@ -48,10 +49,17 @@ public class Node extends Client {
 	 */
 	public static void main(String[] args) throws InterruptedException {
 		System.out.println("RMI Diagnostics Service\nNode Starting (connecting to Server \"" + args[0] + "\")...");
-		Node n = new Node (args[0]);
-		Thread t = new Thread(n);
-		t.run();
-		t.join();
+		Node n;
+		try {
+			n = new Node (args[0]);
+			Thread t = new Thread(n);
+			t.run();
+			t.join();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
 	}
 	
 }
