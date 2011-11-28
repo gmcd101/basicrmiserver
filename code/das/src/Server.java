@@ -2,15 +2,19 @@
 //import java.net.UnknownHostException;
 import java.net.InetAddress;
 import java.rmi.ConnectException;
+import java.rmi.ConnectIOException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UID;
 //import java.util.ArrayList;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.TimerTask;
+import java.util.Timer;
 //import java.util.Scanner;
 import java.util.Map;
 
@@ -24,14 +28,22 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 	private Map<UID, RmiClientInterface> connectedNodes;
 	private Map<UID, RmiClientInterface> connectedViewers;	
 	
-	private List<RmiClientInterface> subscribedViewers;
+	private List<UID> subscribedViewers;
 	
 	//Stores IP addresses of nodes that need to be tested
 	private List<InetAddress> importantNodes;
 	
-	//Stores snapshots, indexed using the IP address of the important node under test
-	//@SuppressWarnings("unused")
-	//private HashMap<InetAddress, Snapshot> snapshots;	
+	
+	private class periodicGather extends TimerTask {
+		Server svr = null;
+		public periodicGather(Server s){
+			svr = s;
+		}
+		public void run(){
+			svr.gatherSnapshots();
+		}
+	}
+	
 	
 	public Server() throws RemoteException
 	{
@@ -40,19 +52,21 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		connectedViewers = new HashMap<UID, RmiClientInterface>();
 		
 		importantNodes = new ArrayList<InetAddress>();
-		subscribedViewers = new ArrayList<RmiClientInterface>();
-		
-		//snapshots = new HashMap<InetAddress, Snapshot>();
+		subscribedViewers = new ArrayList<UID>();
 		
 		//setup server on RMI
 		Registry registry = LocateRegistry.getRegistry();
 		registry.rebind("NetworkDiagSvr", this);
+		
+		Timer timer = new Timer();
+		timer.schedule(new periodicGather(this),new Date(), 60000);
 	}
 
 
 
 	public void run() {
 
+			
 	}
 
 	/**
@@ -62,6 +76,7 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 	public static void main(String[] args) throws InterruptedException{
 		System.out.println("RMI Diagnostics Service\nServer Starting...");
 		Server s = null;
+		
 		try{
 			s = new Server();
 			Thread t = new Thread(s);
@@ -84,33 +99,84 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 	}
 	
 	//TODO write
-	@SuppressWarnings("unused")
 	private void gatherSnapshots(){
 		List<Snapshot> allShots = new ArrayList<Snapshot>();
-		Iterator<Snapshot> allSnaps;
+		//Iterator<Snapshot> allSnaps;
+		Iterator<UID> subscribed;
+		List<UID> toRemove = new ArrayList<UID>();
+		Iterator<UID> removing = null;
+		UID current = null;
+		
+		System.out.println("************************************");
+		System.out.println("Requesting and Sending Snapshots ***");
+		System.out.println("************************************");
+		System.out.println("---- Gathering Snapshots -----");
 		
 		try {
-			Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
-			
+			Iterator<UID> allNodes = connectedNodes.keySet().iterator();
+
 			while(allNodes.hasNext()){
-				allShots.add(allNodes.next().compileSnapshot());
+				current = allNodes.next();
+				System.out.println("Requesting snapshot from node " + current + "...");
+				try{
+					allShots.add(connectedNodes.get(current).compileSnapshot());
+					System.out.println("Snapshot received.");
+				}
+				catch(ConnectException ce){
+					System.out.println("Failed to contact node with id " +current+", removed.");
+				}
+				finally{
+					removing = toRemove.iterator();
+					while(removing.hasNext()){
+						current = removing.next();
+						connectedNodes.remove(current);
+					}
+				}
 			}
 			
-			System.out.println("Collected all snapshots ---");
-			allSnaps = allShots.iterator();
+			System.out.println("------------------------------");
+			System.out.println("----- Sending Snapshots ------");
 			
-			while(allSnaps.hasNext()){
-				System.out.println(allSnaps.next().toString() + "\n----\n");
+			subscribed = subscribedViewers.iterator();
+			
+			while(subscribed.hasNext()){
+				try{
+					current = subscribed.next();
+					connectedViewers.get(current).sendSnapshots(allShots);
+					System.out.println("Snapshots sent to subscribed Viewer with id " + current);
+				}
+				catch(ConnectException ce){
+					System.err.println("Error sending snapshots to subscribed Viewer with id "+current+", removed.");
+					toRemove.add(current);
+				}
+				catch(ConnectIOException ioe){
+					System.err.println("Error finding Viewer "+current+" while attempting to send snapshots, removed.");
+					toRemove.add(current);
+				}
 			}
+			
 		} catch (RemoteException e) {
-			e.printStackTrace();
+			System.out.println("An exception occurred: " + e.getMessage());
 		}
+		finally{
+			removing = toRemove.iterator();
+			while(removing.hasNext()){
+				current = removing.next();
+				subscribedViewers.remove(current);
+				connectedViewers.remove(current);
+			}
+		}
+		System.out.println("------------------------------");
+		System.out.println("************************************");
+		System.out.println("************************************");
+		System.out.println("************************************\n");
+		
 	}
 	
 	
 // REMOTE METHODS //	
 	
-	@Override
+	
 	public UID register(InetAddress ip, clientType type, RmiClientInterface client) throws RemoteException {
 		UID id = new UID(); //issue a new unique ID for the node
 		
@@ -137,16 +203,12 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 	}
 	
 
-	
-	
-	@Override
+
 	public List<InetAddress> setup(UID id, clientType type) throws RemoteException {
 		return importantNodes;
 	}
 
-	
-	
-	@Override
+
 	public void goodbye(UID id, clientType type) throws RemoteException {
 		switch(type){
 			case NODE: 
@@ -171,23 +233,23 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		
 	}
 
-	
-	@Override
+
 	public void addImportantNodes(List<InetAddress> moreNodes) throws RemoteException {
 		importantNodes.addAll(moreNodes);
+		RmiClientInterface currentAdd = null;
 		
 		//Update all connected nodes with new list
 		Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
 		
 		while(allNodes.hasNext()){
-			allNodes.next().updateImportantNodes(importantNodes);
+			currentAdd = allNodes.next();
+			currentAdd.updateImportantNodes(importantNodes);
 		}
 		
 		System.out.println("Added important nodes: " + moreNodes.toString());
 	}
 
-	
-	@Override
+
 	public void removeImportantNodes(List<InetAddress> nodesToDel) throws RemoteException {
 		importantNodes.removeAll(nodesToDel);
 		
@@ -199,7 +261,7 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		}
 	}
 	
-	@Override
+
 	public boolean snapshotSubscribe(UID id, clientType type) throws RemoteException {
 		if(type == clientType.NODE)
 			return false;
@@ -211,7 +273,7 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 			}
 			
 			//is registered, so add to list of subscribed Viewers
-			subscribedViewers.add(connectedViewers.get(id));
+			subscribedViewers.add(id);
 			
 			return true;
 		}

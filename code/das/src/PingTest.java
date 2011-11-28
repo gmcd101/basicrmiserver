@@ -10,6 +10,8 @@ import java.net.InetAddress;
 
 public class PingTest extends Test {
 
+	private static final long serialVersionUID = 1L;
+
 	public PingTest(InetAddress destination) {
 		super(destination);
 	}

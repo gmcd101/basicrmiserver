@@ -6,6 +6,8 @@ import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.server.UID;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -80,6 +82,8 @@ public abstract class Client extends java.rmi.server.UnicastRemoteObject impleme
 		Snapshot newShot = new Snapshot(ip, id);
 		Iterator<InetAddress> nodesToTest = importantNodes.iterator();
 		InetAddress current;
+		long finishTime = 0;
+		long startTime = Calendar.getInstance().getTimeInMillis();
 		
 		while(nodesToTest.hasNext()){
 			current = nodesToTest.next();
@@ -92,9 +96,17 @@ public abstract class Client extends java.rmi.server.UnicastRemoteObject impleme
 			//add the trace route result
 			newShot.addTest(traceResult);
 		}
-
+		
+		finishTime = Calendar.getInstance().getTimeInMillis();
+		
+		System.out.println("Time to compile snapshot: " + (finishTime - startTime)/1000.0 + " seconds.");
+		
 		return newShot;
 	}
 
+	
+	public UID getUID() throws RemoteException {
+		return id;
+	}
 
 }

@@ -1,3 +1,4 @@
+import java.io.Serializable;
 import java.net.InetAddress;
 import java.rmi.server.UID;
 import java.util.ArrayList;
@@ -5,7 +6,9 @@ import java.util.Date;
 import java.util.Iterator;
 
 
-public class Snapshot {
+public class Snapshot implements Serializable{
+
+	private static final long serialVersionUID = 1L;
 	Date timestamp;
 	InetAddress creatorIP;
 	UID creatorID;

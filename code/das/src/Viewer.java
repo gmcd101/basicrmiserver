@@ -1,13 +1,10 @@
 import java.net.InetAddress;
-//import java.net.MalformedURLException;
 import java.net.UnknownHostException;
-//import java.rmi.Naming;
-//import java.rmi.NotBoundException;
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
-//import java.rmi.server.UID;
 import java.util.ArrayList;
-//import java.util.Iterator;
-//import java.util.List;
+import java.util.Iterator;
+import java.util.List;
 import java.util.Scanner;
 
 
@@ -45,14 +42,17 @@ public class Viewer extends Client implements RmiClientInterface {
 						System.out.println("Node added to Server's Important Nodes list.");
 			
 				} catch (UnknownHostException e1) {
-					e1.printStackTrace();
+					System.err.println("Failed to find node based on name.");
 				} catch (RemoteException e) {
 					e.printStackTrace();
 				}
 			}
-			
+		}catch (ConnectException ce){
+			System.err.println("Failed to connect to RMI server.");
+			System.exit(-1);
 		}catch (RemoteException e) {
 			e.printStackTrace();
+			System.exit(-1);
 		}
 	}
 	
@@ -72,6 +72,21 @@ public class Viewer extends Client implements RmiClientInterface {
 			e.printStackTrace();
 		}
 
+	}
+
+
+	@Override
+	public void sendSnapshots(List<Snapshot> shots) throws RemoteException {
+		System.out.println("*****************************************");
+		System.out.println("Received snapshots:\n----");
+		
+		Iterator<Snapshot> allSnaps = shots.iterator();
+		
+		while(allSnaps.hasNext()){
+			System.out.println(allSnaps.next().toString() + "\n----\n");
+		}
+		System.out.println("*****************************************");
+		
 	}
 	
 

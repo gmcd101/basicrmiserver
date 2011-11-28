@@ -3,6 +3,8 @@ import java.net.InetAddress;
 
 public class TraceTest extends Test {
 
+	private static final long serialVersionUID = 1L;
+
 	public TraceTest(InetAddress destination) {
 		super(destination);
 	}

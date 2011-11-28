@@ -1,8 +1,6 @@
-//import java.net.InetAddress;
-//import java.net.InetAddress;
+import java.rmi.ConnectException;
 import java.rmi.RemoteException;
-
-//import java.util.Scanner;
+import java.util.List;
 
  
 public class Node extends Client implements RmiClientInterface {
@@ -15,6 +13,12 @@ public class Node extends Client implements RmiClientInterface {
 		type = RmiServerInterface.clientType.NODE;
 	}
 	
+
+	public void sendSnapshots(List<Snapshot> shots) throws RemoteException {
+		System.out.println("Received snapshots. Should not have happened.");
+		
+	} 
+
 	
 	public void run() {
 		try {
@@ -24,12 +28,17 @@ public class Node extends Client implements RmiClientInterface {
 			updateImportantNodes(importantNodes);
 			
 			//TEST Snapshot
-			System.out.println("---Test Snapshot ---\n" + compileSnapshot().toString() + "\n-----------");
-			
-			
-				server.goodbye(id, type);
-		} catch (RemoteException e) {
-			e.printStackTrace();
+			//System.out.println("---Test Snapshot ---\n" + compileSnapshot().toString() + "\n-----------");
+
+			//server.goodbye(id, type);
+		}catch(ConnectException ce){
+			System.err.println("Failed to connect to RMI registry.\nCheck that it is running.");
+			System.exit(-1);
+		}
+		catch(RemoteException re){
+				System.err.println("Failed to setup RMI.");
+				re.printStackTrace();
+				System.exit(-1);
 		}
 
 	}
@@ -45,10 +54,14 @@ public class Node extends Client implements RmiClientInterface {
 			Thread t = new Thread(n);
 			t.run();
 			t.join();
-		} catch (RemoteException e) {
-			System.err.println("Error Starting Node:");
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		}catch(ConnectException ce){
+				System.err.println("Failed to connect to RMI registry. Check that it is running.");
+				System.exit(-1);
+		}
+		catch(RemoteException re){
+				System.err.println("Failed to setup RMI.");
+				re.printStackTrace();
+				System.exit(-1);
 		}
 
 	}
