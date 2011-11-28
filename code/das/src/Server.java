@@ -98,7 +98,8 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		
 	}
 	
-	//TODO write
+
+	//TODO - locking required to stop new nodes/viewers being added. Causes problems when changing a list while iterating (throws error)
 	private void gatherSnapshots(){
 		List<Snapshot> allShots = new ArrayList<Snapshot>();
 		//Iterator<Snapshot> allSnaps;
@@ -124,6 +125,7 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 				}
 				catch(ConnectException ce){
 					System.out.println("Failed to contact node with id " +current+", removed.");
+					toRemove.add(current);
 				}
 				finally{
 					removing = toRemove.iterator();
