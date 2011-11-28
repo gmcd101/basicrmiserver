@@ -104,7 +104,8 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		List<Snapshot> allShots = new ArrayList<Snapshot>();
 		//Iterator<Snapshot> allSnaps;
 		Iterator<UID> subscribed;
-		List<UID> toRemove = new ArrayList<UID>();
+		List<UID> toRemoveNodes = new ArrayList<UID>();
+		List<UID> toRemoveViewers = new ArrayList<UID>();
 		Iterator<UID> removing = null;
 		UID current = null;
 		
@@ -125,15 +126,15 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 				}
 				catch(ConnectException ce){
 					System.out.println("Failed to contact node with id " +current+", removed.");
-					toRemove.add(current);
+					toRemoveNodes.add(current);
 				}
-				finally{
-					removing = toRemove.iterator();
-					while(removing.hasNext()){
-						current = removing.next();
-						connectedNodes.remove(current);
-					}
-				}
+				//finally{
+				//	removing = toRemove.iterator();
+				//	while(removing.hasNext()){
+				//		current = removing.next();
+				//		connectedNodes.remove(current);
+				//	}
+				//}
 			}
 			
 			System.out.println("------------------------------");
@@ -149,11 +150,11 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 				}
 				catch(ConnectException ce){
 					System.err.println("Error sending snapshots to subscribed Viewer with id "+current+", removed.");
-					toRemove.add(current);
+					toRemoveViewers.add(current);
 				}
 				catch(ConnectIOException ioe){
 					System.err.println("Error finding Viewer "+current+" while attempting to send snapshots, removed.");
-					toRemove.add(current);
+					toRemoveViewers.add(current);
 				}
 			}
 			
@@ -161,11 +162,19 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 			System.out.println("An exception occurred: " + e.getMessage());
 		}
 		finally{
-			removing = toRemove.iterator();
+			
+			/* FR: Block here removes the nodes and viewers which were unreachable, as detected during compiling and sending of snapshots */
+			removing = toRemoveViewers.iterator();
 			while(removing.hasNext()){
 				current = removing.next();
 				subscribedViewers.remove(current);
 				connectedViewers.remove(current);
+			}
+			
+			removing = toRemoveNodes.iterator();
+			while(removing.hasNext()){
+				current = removing.next();
+				connectedNodes.remove(current);
 			}
 		}
 		System.out.println("------------------------------");
