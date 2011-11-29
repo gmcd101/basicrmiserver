@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.10.17)  28 NOV 2011 12:39
+This is pdfTeX, Version 3.1415926-2.3-1.40.12 (TeX Live 2011) (format=pdflatex 2011.10.17)  29 NOV 2011 09:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -122,6 +122,88 @@ File: omsptm.fd
 )
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
 (Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 401.
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ² in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ´ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ´ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ² in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ´ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ´ in font ptmr7t!
+
+
+LaTeX Warning: Citation `Khul' on page 1 undefined on input line 455.
+
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ² in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ´ in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ² in font ptmr7t!
+Missing character: There is no â in font ptmr7t!
+Missing character: There is no € in font ptmr7t!
+Missing character: There is no š in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no „ in font ptmr7t!
+Missing character: There is no Ã in font ptmr7t!
+Missing character: There is no ´ in font ptmr7t!
+[1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+
+
+]
+Underfull \hbox (badness 10000) in paragraph at lines 632--633
+[]\OT1/ptm/m/n/8 http://www.gsd.inesc-id.pt/ mpc/pubs/khanna-monitor-tdsc.pdf p
+ages
+ []
 
 
 ** Conference Paper **
@@ -134,29 +216,31 @@ Before submitting the final camera ready copy, remember to:
  uses only Type 1 fonts and that every step in the generation
  process uses the appropriate paper size.
 
-[1{/usr/local/texlive/2011/texmf-var/fonts/map/pdftex/updmap/pdftex.map}
+[2
 
+] (./report.aux)
 
-]
-(./report.aux) ) 
+LaTeX Warning: There were undefined references.
+
+ ) 
 Here is how much of TeX's memory you used:
- 923 strings out of 493633
- 16180 string characters out of 3143376
- 68895 words of memory out of 3000000
- 4289 multiletter control sequences out of 15000+200000
- 34143 words of font info for 63 fonts, out of 3000000 for 9000
+ 932 strings out of 493633
+ 16244 string characters out of 3143376
+ 71895 words of memory out of 3000000
+ 4297 multiletter control sequences out of 15000+200000
+ 35250 words of font info for 64 fonts, out of 3000000 for 9000
  834 hyphenation exceptions out of 8191
- 26i,8n,19p,1007b,293s stack positions out of 5000i,500n,10000p,200000b,50000s
-{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc
-}</usr/local/texlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb>
-</usr/local/texlive/2011/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/loca
-l/texlive/2011/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive
-/2011/texmf-dist/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texm
-f-dist/fonts/type1/urw/times/utmri8a.pfb>
-Output written on report.pdf (1 page, 55227 bytes).
+ 26i,8n,19p,1210b,293s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/usr/local/texlive/2011/texmf-dist/fonts/enc/dvips/base/8r.enc}</usr/local/t
+exlive/2011/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.pfb></usr/local/te
+xlive/2011/texmf-dist/fonts/type1/urw/times/utmb8a.pfb></usr/local/texlive/2011
+/texmf-dist/fonts/type1/urw/times/utmbi8a.pfb></usr/local/texlive/2011/texmf-di
+st/fonts/type1/urw/times/utmr8a.pfb></usr/local/texlive/2011/texmf-dist/fonts/t
+ype1/urw/times/utmri8a.pfb>
+Output written on report.pdf (2 pages, 60313 bytes).
 PDF statistics:
- 29 PDF objects out of 1000 (max. 8388607)
- 20 compressed objects within 1 object stream
+ 32 PDF objects out of 1000 (max. 8388607)
+ 22 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  1 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -448,6 +448,12 @@ In the following report we first present summary of previous related work (\ref{
 %highlight main achievments
 %say what it does/does not do
 
+There are a range of popular proposed techniques that attempt to tackle the problem of fault detection and diagnosis in distributed systems. This section will discuss contributions in the field of fault detection and contrast them with our approach to establish its merits and weaknesses. 
+
+Verissimo et al take a centralised approach, where a ‚ÄòMonitor System‚Äô monitors all protocol traffic between nodes in a distributed system. The system develops a model of the send and receive ordering of a protocol (hence modeling the system state, rather than a node‚Äôs internal state) in addition to Quality of Service rules. When a failure occurs, the system traces the error propagation back to the origin of the failure using the developed model as a diagnosis of the problem.\cite{khanna}  Our focus is more general, with more focus on Quality of Service issues than service failures. Furthermore, as our approach is peer based, where peers gather snapshot data from their perspective on different ‚Äòbranches‚Äô of the network we are able to identify Quality of Service issues specific to certain regions of the network. However, some failures can also be identified if a host becomes unreachable. Although our method can identify nodes that are failing to provide expected QoS levels through rudimentary tests, it is less strong at identifying the specific source of the issue which is left to the network administrator‚Äôs judgement using other tools.
+
+Some other systems, like our own, take the approach of 'testing' key nodes the network and passing the result for analysis to a \'monitor\' node, rather than monitoring all packets sent for an instance of a failure from a centralised point.\cite{Khul}  Holt and Smith discourage using centralised monitoring nodes as it ‚Äòruns counter to fundamental principles of distributed systems where there is no fault-free all-knowing supervisor.‚Äô\cite{ieee}  There are advantages to this distributed model of fault detection. It is possible, for example, through collaboration of the testing nodes and the aggregation of their data by a ‚Äòmonitoring‚Äô node to identify which nodes are getting the least efficient service on a network.
+
 %----------------------------------------------------------------------
 \section{System Design}
 \label{sys} 
@@ -622,6 +628,14 @@ The authors would like to thank...
 \bibitem{BosakHendrick}
 Bosack, L. and Hedrick, C. \emph{Problems in Large LANs}, Network, IEEE, vol 2, no.1, pp.49-56, jan 1988
 
+\bibitem{khanna}
+http://www.gsd.inesc-id.pt/~mpc/pubs/khanna-monitor-tdsc.pdf pages 266-267
+
+\bibitem{khul}
+\"FAULT-DIAGNOSIS IN FULLY DISTRIBUTED SYSTEMS J.G. Kuhl and S.M. Reddy\" , page 306
+
+\bibitem{ieee}
+http://ieeexplore.ieee.org/stamp/stamp.jsp?tp=\&arnumber=1676512
 
 
 %\bibitem{IEEEhowto:kopka}
