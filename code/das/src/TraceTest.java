@@ -1,7 +1,11 @@
+import java.net.InetAddress;
+
 
 public class TraceTest extends Test {
 
-	public TraceTest(String destination) {
+	private static final long serialVersionUID = 1L;
+
+	public TraceTest(InetAddress destination) {
 		super(destination);
 	}
 
@@ -10,10 +14,11 @@ public class TraceTest extends Test {
 		String out;
         try {
         	Runtime rt = Runtime.getRuntime();
-			Process proc = rt.exec("traceroute "+destination);
+			Process proc = rt.exec("traceroute "+destination.getHostAddress());
 			out = inputStreamToString(proc.getInputStream());
 			
         }catch (Exception e){
+        	e.printStackTrace();
         	return null;
         }
 		return new TraceResult(out);
