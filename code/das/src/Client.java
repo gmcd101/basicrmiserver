@@ -66,10 +66,13 @@ public abstract class Client extends java.rmi.server.UnicastRemoteObject impleme
 	
 	public void updateImportantNodes(List<InetAddress> impNodes){
 		System.out.println("Updated important nodes list received:\n" + impNodes);
-		importantNodes = new ArrayList<InetAddress>(impNodes);
+		synchronized(importantNodes){
+			importantNodes = new ArrayList<InetAddress>(impNodes);
+		}
 	}
 	
 	public List<InetAddress> getImportantNodes(){
+		//TODO deep copy
 		return importantNodes;
 	}
 	
@@ -88,13 +91,25 @@ public abstract class Client extends java.rmi.server.UnicastRemoteObject impleme
 		while(nodesToTest.hasNext()){
 			current = nodesToTest.next();
 
-			TestResult pingResult = (new PingTest(current)).run();
-			TestResult traceResult = (new TraceTest(current)).run();
+			Test pingResult = new PingTest(current);
+			Test traceResult = new TraceTest(current);
 
-			//add the ping test result
-			newShot.addTest(pingResult);
-			//add the trace route result
-			newShot.addTest(traceResult);
+			//set up threads
+			Thread t1 = new Thread(pingResult);
+			Thread t2 = new Thread(traceResult);
+			//run threads
+			t1.start();
+			t2.start();
+			try{
+				//add the ping test result
+				t1.join();
+				newShot.addTest(pingResult.getResult());
+				//add the trace route result
+				t2.join();
+				newShot.addTest(traceResult.getResult());
+			}catch(Exception e){
+				System.out.println("Test threads interrupted.");
+			}
 		}
 		
 		finishTime = Calendar.getInstance().getTimeInMillis();

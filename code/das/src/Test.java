@@ -9,10 +9,11 @@ import java.net.InetAddress;
 import java.util.Scanner;
 
 
-public abstract class Test implements Serializable {
+public abstract class Test implements Serializable, Runnable {
 
 	private static final long serialVersionUID = 1L;
 	InetAddress destination;
+	TestResult out;
 	public Test(InetAddress destination){
 		this.destination = destination;
 	}
@@ -27,5 +28,7 @@ public abstract class Test implements Serializable {
 		return output;
 	}
 	
-	public abstract TestResult run();
+	public TestResult getResult(){	
+		return out;
+	}
 }

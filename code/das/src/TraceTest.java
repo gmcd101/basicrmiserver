@@ -10,18 +10,19 @@ public class TraceTest extends Test {
 	}
 
 	@Override
-	public TestResult run() {
-		String out;
+	public void run() {
+		String output;
         try {
         	Runtime rt = Runtime.getRuntime();
 			Process proc = rt.exec("traceroute "+destination.getHostAddress());
-			out = inputStreamToString(proc.getInputStream());
+			output = inputStreamToString(proc.getInputStream());
+			out = new TraceResult(output);
 			
         }catch (Exception e){
         	e.printStackTrace();
-        	return null;
+        	output = null;
         }
-		return new TraceResult(out);
+		
 	}
 
 }

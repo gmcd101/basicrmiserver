@@ -15,21 +15,18 @@ public class PingTest extends Test {
 	public PingTest(InetAddress destination) {
 		super(destination);
 	}
-	
+
 	@Override
-	public TestResult run(){
-		String out;
+	public void run() {
+		String output;
         try {
         	Runtime rt = Runtime.getRuntime();
 			Process proc = rt.exec("ping "+destination.getHostAddress()+" -c 5");
-			
-			out = inputStreamToString(proc.getInputStream());
-
+			output = inputStreamToString(proc.getInputStream());
+			out = new PingResult(output);
         }catch (Exception e){
         	e.printStackTrace();
-        	return null;
+        	out = null;
         }
-		return new PingResult(out);
 	}
-
 }

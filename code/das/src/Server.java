@@ -34,13 +34,16 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 	private List<InetAddress> importantNodes;
 	
 	
-	private class periodicGather extends TimerTask {
+	private static class periodicGather extends TimerTask {
+		private static Object lock = new Object();
 		Server svr = null;
 		public periodicGather(Server s){
 			svr = s;
 		}
 		public void run(){
-			svr.gatherSnapshots();
+			synchronized(lock){
+				svr.gatherSnapshots();
+			}
 		}
 	}
 	
@@ -97,7 +100,29 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		}
 		
 	}
-	
+	private class snapshotRun implements Runnable {
+		RmiClientInterface ri;
+		Snapshot out;
+		UID id;
+		public snapshotRun (UID u,RmiClientInterface ri){
+			this.ri = ri;
+			id = u;
+		}
+		@Override
+		public void run() {
+			System.out.println("Snapshot fired.");
+			try {
+				out = ri.compileSnapshot();
+			} catch (RemoteException e) {
+				out = null;
+				System.out.println("Failed to contact node with id " +id+", removed.");
+			}
+		}
+		public Snapshot getResult(){
+			return this.out;
+		}
+		
+	}
 
 	//TODO - locking required to stop new nodes/viewers being added. Causes problems when changing a list while iterating (throws error)
 	private void gatherSnapshots(){
@@ -107,6 +132,8 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		List<UID> toRemoveNodes = new ArrayList<UID>();
 		List<UID> toRemoveViewers = new ArrayList<UID>();
 		Iterator<UID> removing = null;
+		Map<UID, Thread> jobs = new HashMap<UID, Thread>();
+		Map<UID, snapshotRun> jobObj = new HashMap<UID, snapshotRun>();
 		UID current = null;
 		
 		System.out.println("************************************");
@@ -115,26 +142,65 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		System.out.println("---- Gathering Snapshots -----");
 		
 		try {
-			Iterator<UID> allNodes = connectedNodes.keySet().iterator();
-
+			Iterator<UID> allNodes;
+			synchronized(connectedNodes){
+				allNodes = connectedNodes.keySet().iterator();
+			}
+			//go through all nodes and compile their snapshots
 			while(allNodes.hasNext()){
 				current = allNodes.next();
 				System.out.println("Requesting snapshot from node " + current + "...");
-				try{
-					allShots.add(connectedNodes.get(current).compileSnapshot());
-					System.out.println("Snapshot received.");
+
+				snapshotRun sr;
+				synchronized(connectedNodes){
+					sr = new snapshotRun(current, connectedNodes.get(current));
 				}
-				catch(ConnectException ce){
-					System.out.println("Failed to contact node with id " +current+", removed.");
-					toRemoveNodes.add(current);
+				Thread t = new Thread(sr);
+				jobObj.put(current, sr);
+				jobs.put(current, t);
+
+				t.start();
+			}
+			boolean finished = false;
+			//go through all nodes and wait on their completion
+			//	make sure that if interrupted to stop
+			ArrayList<UID> jobQueue;
+			synchronized(connectedNodes){
+				jobQueue = new ArrayList<UID>(connectedNodes.keySet());
+			}
+			
+			while(!finished){
+				//go over all of threads and try to get data
+				synchronized(jobQueue){
+					Iterator<UID> i = jobQueue.iterator();				
+					while(i.hasNext()){
+						current = i.next();
+						if(jobs.get(current).isAlive()){
+							System.out.println("active job currently on node id: "+current);
+							continue;
+						}
+						Snapshot jobResult = jobObj.get(current).getResult();
+						if(jobResult == null){
+							System.out.println("killing node id: "+current);
+							toRemoveNodes.add(current);
+						}else{
+							System.out.println("adding job result from node id: "+current);
+							allShots.add(jobResult);
+							jobQueue.remove(current);
+						}
+					}
+					//continue work until empty job queue
+					if(jobQueue.isEmpty()){
+						finished = true;
+					}else{
+						try {
+							System.out.println("Going to sleep");
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+					}
 				}
-				//finally{
-				//	removing = toRemove.iterator();
-				//	while(removing.hasNext()){
-				//		current = removing.next();
-				//		connectedNodes.remove(current);
-				//	}
-				//}
 			}
 			
 			System.out.println("------------------------------");
@@ -156,25 +222,46 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 					System.err.println("Error finding Viewer "+current+" while attempting to send snapshots, removed.");
 					toRemoveViewers.add(current);
 				}
+				catch(Exception e){
+					System.err.println("Unknown exception "+e.getMessage()+ "occured");
+					toRemoveViewers.add(current);
+				}
 			}
-			
-		} catch (RemoteException e) {
-			System.out.println("An exception occurred: " + e.getMessage());
+			 
+		//}catch (RemoteException e) {
+			//System.out.println("An exception occurred: " + e.getMessage());
+		}catch(Exception e){
+			System.out.println("Unexpected exception: "+e.getMessage());
+			e.printStackTrace();
 		}
+			
+		
 		finally{
 			
 			/* FR: Block here removes the nodes and viewers which were unreachable, as detected during compiling and sending of snapshots */
 			removing = toRemoveViewers.iterator();
-			while(removing.hasNext()){
-				current = removing.next();
-				subscribedViewers.remove(current);
-				connectedViewers.remove(current);
+			synchronized(subscribedViewers){
+				while(removing.hasNext()){
+					current = removing.next();
+					subscribedViewers.remove(current);
+				}
+			}
+			
+			removing = toRemoveViewers.iterator();
+			synchronized(connectedViewers){
+				
+				while(removing.hasNext()){
+					current = removing.next();
+					connectedViewers.remove(current);
+				}
 			}
 			
 			removing = toRemoveNodes.iterator();
-			while(removing.hasNext()){
-				current = removing.next();
-				connectedNodes.remove(current);
+			synchronized(connectedNodes){
+				while(removing.hasNext()){
+					current = removing.next();
+					connectedNodes.remove(current);
+				}
 			}
 		}
 		System.out.println("------------------------------");
@@ -250,25 +337,28 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		RmiClientInterface currentAdd = null;
 		
 		//Update all connected nodes with new list
-		Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
-		
-		while(allNodes.hasNext()){
-			currentAdd = allNodes.next();
-			currentAdd.updateImportantNodes(importantNodes);
+		synchronized(connectedNodes){
+			Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
+			
+			while(allNodes.hasNext()){
+				currentAdd = allNodes.next();
+				currentAdd.updateImportantNodes(importantNodes);
+			}
 		}
-		
 		System.out.println("Added important nodes: " + moreNodes.toString());
 	}
 
 
 	public void removeImportantNodes(List<InetAddress> nodesToDel) throws RemoteException {
-		importantNodes.removeAll(nodesToDel);
-		
-		//Update all connected nodes with new list
-		Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
-		
-		while(allNodes.hasNext()){
-			allNodes.next().updateImportantNodes(importantNodes);
+		synchronized(importantNodes){
+			importantNodes.removeAll(nodesToDel);
+			
+			//Update all connected nodes with new list
+			Iterator<RmiClientInterface> allNodes = connectedNodes.values().iterator();
+			
+			while(allNodes.hasNext()){
+				allNodes.next().updateImportantNodes(importantNodes);
+			}
 		}
 	}
 	
@@ -277,12 +367,13 @@ public class Server extends java.rmi.server.UnicastRemoteObject implements Runna
 		if(type == clientType.NODE)
 			return false;
 		
-		synchronized(subscribedViewers){
+		synchronized(connectedViewers){
 			//check viewer is registered
 			if (!connectedViewers.containsKey(id)){
 				return false;
 			}
-			
+		}
+		synchronized(subscribedViewers){	
 			//is registered, so add to list of subscribed Viewers
 			subscribedViewers.add(id);
 			

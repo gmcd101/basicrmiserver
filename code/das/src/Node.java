@@ -52,7 +52,7 @@ public class Node extends Client implements RmiClientInterface {
 		try {
 			n = new Node (args[0]);
 			Thread t = new Thread(n);
-			t.run();
+			t.start();
 			t.join();
 		}catch(ConnectException ce){
 				System.err.println("Failed to connect to RMI registry. Check that it is running.");
