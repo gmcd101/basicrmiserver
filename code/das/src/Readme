@@ -1,0 +1,14 @@
+ReadMe for Server Diagnostics System
+
+To get the project running:
+Execute setup.sh
+
+Run server.sh on a machine, this will be where the RMI Server is located.
+
+Run node.sh and pass in the address to the server, for example 'node.sh bo620-14u'. This will act as a node on the network which will perform periodic tests.
+
+Run viewer.sh and pass in the address to the server, for example 'viewer.sh bo620-14u'. This is the administrators program which will allow for the input of important network nodes to be checked. The server will also output the collected test results to the viewer.
+
+You can assign multiple nodes onto one RMI server, allowing for many tests to be ran in parallel.
+
+You can also assign multilple viewers to one RMI Server and this will display the results to both of them. The viewers are able to input many important nodes on the network which the testing nodes must check.
