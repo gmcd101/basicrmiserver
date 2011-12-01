@@ -463,14 +463,20 @@ Some other systems, like our own, take the approach of 'testing' key nodes the n
 %design choices
 %justify design choices
 
+
 \subsection{System Overview}
 \label{sysover}
 %high level overview of system
 %diagrams to help explain concepts
 
+%client - server architecture with an 'admin' application (viewer)
+
 \subsection{System Interactions}
 \label{inter}
 %interactions between concepts
+
+% server collects snapshots from nodes periodically
+% when snapshots collected send to viewer
 
 %----------------------------------------------------------------------
 \section{Implementation}
@@ -481,6 +487,8 @@ Some other systems, like our own, take the approach of 'testing' key nodes the n
 \label{funct}
 %what aspects worked as expected, missing functionality?
 %how important issues have been dealt with
+
+%implementation is made as a service, with viewer being a test program
 
 %----------------------------------------------------------------------
 \section{Evaluation}
