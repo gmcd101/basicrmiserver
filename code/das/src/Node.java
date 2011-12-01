@@ -37,8 +37,11 @@ public class Node extends Client implements RmiClientInterface {
 		}
 		catch(RemoteException re){
 				System.err.println("Failed to setup RMI.");
-				re.printStackTrace();
+				//re.printStackTrace();
 				System.exit(-1);
+		}
+		catch(Exception e){
+			System.err.println("Unable to find server "+e.getMessage());
 		}
 
 	}

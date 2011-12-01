@@ -87,30 +87,46 @@ public abstract class Client extends java.rmi.server.UnicastRemoteObject impleme
 		InetAddress current;
 		long finishTime = 0;
 		long startTime = Calendar.getInstance().getTimeInMillis();
-		
+		System.out.println("Compiling Snapshot");
+		ArrayList<Thread> testThreads = new ArrayList<Thread>(); 
+		ArrayList<Test> tests = new ArrayList<Test>();
 		while(nodesToTest.hasNext()){
 			current = nodesToTest.next();
 
 			Test pingResult = new PingTest(current);
 			Test traceResult = new TraceTest(current);
-
+			System.out.println("Running test for: " + current.getHostAddress());
 			//set up threads
 			Thread t1 = new Thread(pingResult);
 			Thread t2 = new Thread(traceResult);
+			//store threads in ext data
+			tests.add(pingResult);
+			testThreads.add(t1);
+			tests.add(traceResult);
+			testThreads.add(t2);
 			//run threads
 			t1.start();
 			t2.start();
-			try{
-				//add the ping test result
-				t1.join();
-				newShot.addTest(pingResult.getResult());
-				//add the trace route result
-				t2.join();
-				newShot.addTest(traceResult.getResult());
-			}catch(Exception e){
-				System.out.println("Test threads interrupted.");
-			}
 		}
+		try{
+			for(int i = 0; i < testThreads.size(); i++){
+				testThreads.get(i).join();
+				newShot.addTest(tests.get(i).getResult());
+			}
+		} catch (InterruptedException e) {
+			System.out.println("Test threads interrupted.");
+		}
+		/*
+		try{
+			//add the ping test result
+			t1.join();
+			newShot.addTest(pingResult.getResult());
+			//add the trace route result
+			t2.join();
+			newShot.addTest(traceResult.getResult());
+		}catch(Exception e){
+			System.out.println("Test threads interrupted.");
+		}*/
 		
 		finishTime = Calendar.getInstance().getTimeInMillis();
 		

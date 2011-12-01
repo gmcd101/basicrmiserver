@@ -20,10 +20,12 @@ public class PingTest extends Test {
 	public void run() {
 		String output;
         try {
+        	System.out.println("Starting ping test");
         	Runtime rt = Runtime.getRuntime();
 			Process proc = rt.exec("ping "+destination.getHostAddress()+" -c 5");
 			output = inputStreamToString(proc.getInputStream());
 			out = new PingResult(output);
+			System.out.println("Finished ping test");
         }catch (Exception e){
         	e.printStackTrace();
         	out = null;

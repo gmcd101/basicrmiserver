@@ -63,7 +63,7 @@ public class Viewer extends Client implements RmiClientInterface {
 		try {
 			v = new Viewer (args[0]);
 			Thread t = new Thread(v);
-			t.run();
+			t.start();
 			
 			
 			t.join();
