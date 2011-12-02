@@ -1,4 +1,5 @@
 
+
 %% bare_conf.tex
 %% V1.3
 %% 2007/01/11
@@ -127,7 +128,7 @@
 % *** GRAPHICS RELATED PACKAGES ***
 %
 \ifCLASSINFOpdf
-  % \usepackage[pdftex]{graphicx}
+  \usepackage[pdftex]{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../pdf/}{../jpeg/}}
   % and their extensions so you won't have to specify these with
@@ -137,7 +138,7 @@
   % or other class option (dvipsone, dvipdf, if not using dvips). graphicx
   % will default to the driver specified in the system graphics.cfg if no
   % driver is specified.
-  % \usepackage[dvips]{graphicx}
+  \usepackage[dvips]{graphicx}
   % declare the path(s) where your graphic files are
   % \graphicspath{{../eps/}}
   % and their extensions so you won't have to specify these with
@@ -458,27 +459,52 @@ Some other systems, like our own, take the approach of 'testing' key nodes the n
 \section{System Design}
 \label{sys} 
 
-\subsection{Design Choices}
-\label{descho}
-%design choices
-%justify design choices
-
+This section will outline the structure of our system, describing the role of components and the interactions between components in the system to collaborate to perform the overall function of providing a network snapshot. The motivations behind our choices will also be discussed. 
 
 \subsection{System Overview}
 \label{sysover}
+%design choices
+%justify design choices
+
+Our system creates a snapshot overview of the system through the collaboration of multiple nodes presenting their view of the network, by performing some basic diagnostics on key nodes, to a monitoring system which aggregates the data. The monitor and collaborating clients act as a middleware layer for the network, by exposing an API which can be used by a node to retrieve a snapshot of the network at any given moment. A node accessing the middleware’s API can then perform some analysis on the retrieved snapshot to infer some useful information to their function about the state of the network.
+
+
+\subsection{High Level Diagram}
+\label{highlvldia}
 %high level overview of system
 %diagrams to help explain concepts
 
 %client - server architecture with an 'admin' application (viewer)
 
-\subsection{System Interactions}
-\label{inter}
+\includegraphics[scale = 0.3]{highleveldiagram.jpg}
+
+
+
+\subsection{Component Descriptions}
+\label{compdesc}
 %interactions between concepts
 
 % server collects snapshots from nodes periodically
 % when snapshots collected send to viewer
 
 %----------------------------------------------------------------------
+
+Our system has three main components: the monitor, the clients and the viewers. 
+
+The monitor provides a list of node addresses of interest to the registered clients to probe with network diagnostics. The monitor periodically commands the registered clients to run their diagnostics, and provide the results to the server. 
+
+The monitored clients register with the server, then await a ‘command’ (method invocation) from the monitor to gather a view of the network from its perspective by issuing some basic tests; a ping, and a TraceRoute. The result is returned to the Monitor (server) which aggregates the other client results into a snapshot.
+
+The viewer adds and removes nodes of interests for the clients to probe. The viewer subscribes to the server to receive the periodical network snapshot.
+
+\subsection{Motivations}
+\label{desmot}
+
+We have elected to take a decentralised approach to network analysis. Networks can be highly heterogeneous and large in size; some nodes in our system may feature on highly loaded sections of the network for example. As such, we believe it is useful to have information about the network from the perspective of different nodes rather than employing tests from any specific node. 
+
+We have attempted to make our system highly flexible, for use as a middleware layer within a network. This motivated the choice to have any clients on the network be registered to perform diagnosis. In different setups, different nodes may be selected as nodes typical to certain characteristics of the specific area of the network and registered with the server. As these nodes become less important, they can be deregistered from the server. Furthermore, we have attempted to make our API to the monitor flexible so that the viewer may use it for different ends. The API can be used by different viewers with different goals to generate data relevant to their needs.
+
+
 \section{Implementation}
 \label{imple}
 %how you realised your design
